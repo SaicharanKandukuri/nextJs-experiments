@@ -19,28 +19,24 @@ export default function Page() {
   const [name, setName] = useState<string>("");
 
   const [isLoginLoading, setisLoginLoading] = useState<boolean>(false);
-  const [ isRe]
 
   const register = async () => {
     console.log(email, password, name)
     await account.create(ID.unique(), email, password, name)
   }
-  const login = async (username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     setisLoginLoading(true)
     const session = await account.createEmailSession(email, password)
     setLoggedInUser(await account.get());
-    setisLoginLoading(false)
+    setisLoginLoading(await account.get()? false : true);
   }
   const logout = async () => {
     await account.deleteSession("current");
     setLoggedInUser(null)
   }
 
-
   function crm_logout() { }
   function crm_getUser() { }
-
-
 
   const fk = async () => {
     console.log("fk")
@@ -86,7 +82,7 @@ export default function Page() {
             />
             <div className="flex flex-row justify-center m-6">
               <Button className={`${Buttons.basic}`} onClick={register}>Register</Button>
-              <Button className={`${Buttons.basic}`} isLoading={isLoginLoading} onClick={() => { crm_login(email, password, setisLoginLoading) }}>Login</Button>
+              <Button className={`${Buttons.basic}`} isLoading={isLoginLoading} onClick={() => { login(email, password) }}>Login</Button>
             </div>
         </div>
       </div>
